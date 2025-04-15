@@ -11,14 +11,13 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.chrome.options import Options
 
-
 class TestSmoke():
   def setup_method(self, method):
     options = Options()
     options.add_argument("--headless=new")
     self.driver = webdriver.Chrome(options=options)
     self.vars = {}
-  
+    
   def teardown_method(self, method):
     self.driver.quit()
   
@@ -67,5 +66,6 @@ class TestSmoke():
     self.driver.find_element(By.ID, "password").click()
     self.driver.find_element(By.ID, "password").send_keys("notanadmin")
     self.driver.find_element(By.CSS_SELECTOR, ".mysubmit:nth-child(4)").click()
+    WebDriverWait(self.driver, 3000).until(expected_conditions.presence_of_element_located((By.CSS_SELECTOR, ".errorMessage")))
     assert self.driver.find_element(By.CSS_SELECTOR, ".errorMessage").text == "Invalid username and password."
   
